@@ -150,3 +150,90 @@ The following fields are required in the request body:
   "error": "An unexpected error occurred. Please try again later."
 }
 ```
+
+## Endpoint: `/users/profile`
+
+### Description
+This endpoint is used to retrieve the profile of the currently authenticated user.
+
+### Method
+`GET`
+
+### Headers
+- `Authorization` (string): Bearer token for authentication.
+
+### Response Status Codes
+- `200 OK`: Successfully retrieved user profile.
+- `401 Unauthorized`: User is not authenticated.
+- `500 Internal Server Error`: Server encountered an error while processing the request.
+
+### Example Response
+- `user` (object):
+  - `fullname` (object):
+    - `firstname` (string): Must be at least 3 characters long.
+    - `lastname` (string): Optional, but if provided, must be at least 3 characters long.
+  - `email` (string): Must be a valid email address.
+
+#### Success (200 OK)
+```json
+{
+  "id": "unique_user_id",
+  "email": "example@example.com",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  }
+}
+```
+
+#### Error (401 Unauthorized)
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+#### Error (500 Internal Server Error)
+```json
+{
+  "error": "An unexpected error occurred. Please try again later."
+}
+```
+
+## Endpoint: `/users/logout`
+
+### Description
+This endpoint is used to log out the currently authenticated user by invalidating their token.
+
+### Method
+`GET`
+
+### Headers
+- `Authorization` (string): Bearer token for authentication.
+
+### Response Status Codes
+- `200 OK`: Successfully logged out.
+- `401 Unauthorized`: User is not authenticated.
+- `500 Internal Server Error`: Server encountered an error while processing the request.
+
+
+#### Success (200 OK)
+```json
+{
+  "message": "Logged out"
+}
+```
+
+#### Error (401 Unauthorized)
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+#### Error (500 Internal Server Error)
+```json
+{
+  "error": "An unexpected error occurred. Please try again later."
+}
+```

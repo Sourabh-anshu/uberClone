@@ -1,31 +1,61 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import React, { useState} from 'react'
+import { Link, useNavigate } from 'react-router-dom';
+import { CaptainDataContext } from '../context/CaptainContext';
+import axios from 'axios';
+
 
 const captainSignup = () => {
   
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [captainData, setcaptainData] = useState({});
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
-  const submitHandler = (e)=>{
+  const [vehicleColor, setVehicleColor] = useState('');
+  const [vehiclePlate, setVehiclePlate] = useState('');
+  const [vehicleCapacity, setVehicleCapacity] = useState('');
+  const [vehicleType, setVehicleType] = useState('');
+
+  const {captain,setCaptain} = React.useContext(CaptainDataContext)
+
+  const submitHandler = async (e)=>{
     e.preventDefault();
-    setcaptainData({
-      fullName:{
-        firstName:firstName,
-        lastName:lastName,
+    const captainData = {
+      fullname:{
+        firstname:firstName,
+        lastname:lastName,
       },
       email:email,
       password:password,
-    });
-    console.log(captainData);
+      vehicle:{
+        vehicleType:vehicleType,
+        capacity:vehicleCapacity,
+        color:vehicleColor,
+        plate:vehiclePlate,
+      },
+    };
+
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData);
+
+    if(response.status === 201){
+      const data = response.data;
+      setCaptain(data.captain);
+      localStorage.setItem('token', data.token);
+      navigate('/captain-home');
+    }
+
     setEmail('');
     setPassword('');
     setFirstName('');
     setLastName('');
+    setVehicleCapacity('');
+    setVehicleColor('');
+    setVehiclePlate("");
+    setVehicleType('');
+  };
 
-  }
   return (
     <div className='p-6 flex flex-col h-screen justify-between'>
       <div>
@@ -76,9 +106,47 @@ const captainSignup = () => {
             placeholder='**********'
             className='bg-[#eeeeee] border rounded w-full px-3 py-2 text-lg placeholder:text-base mb-5'
           />
-          <button className='bg-black text-white rounded p-3 font-bold w-full mb-2'>Signup Now</button>
+          <h3 className='text-lg font-semibold mb-2'>Vehicle Details</h3>
+          <div className='flex flex-wrap gap-3 mb-5'>
+            <input 
+              type="text" 
+              required
+              value={vehiclePlate}
+              onChange={(e) => setVehiclePlate(e.target.value)}
+              placeholder='License Plate Number'
+              className='bg-[#eeeeee] w-[48%] rounded border px-3 py-2 text-lg placeholder:text-base mb-3'
+            />
+            <input 
+              type="text" 
+              required
+              value={vehicleColor}
+              onChange={(e) => setVehicleColor(e.target.value)}
+              placeholder='Vehicle Color'
+              className='bg-[#eeeeee] w-[48%] rounded border px-3 py-2 text-lg placeholder:text-base mb-3'
+            />
+            <input 
+              type="number" 
+              required
+              value={vehicleCapacity}
+              onChange={(e) => setVehicleCapacity(e.target.value)}
+              placeholder='Vehicle Capacity'
+              className='bg-[#eeeeee] w-[48%] rounded border px-3 py-2 text-lg placeholder:text-base'
+            />
+            <select 
+              value={vehicleType}
+              onChange={(e) => setVehicleType(e.target.value)}
+              required
+              className='bg-[#eeeeee] w-[48%] rounded border px-3 py-2 text-lg'
+            >
+              <option value="">Vehicle Type</option>
+              <option value="moto">Moto</option>
+              <option value="car">Car</option>
+              <option value="auto">Auto</option>
+            </select>
+          </div>
+          <button className='bg-black text-white rounded p-3 font-bold w-full mb-2'>Create Account</button>
         </form>
-        <p className='text-lg text-center mb-2'>Already have an account? <Link to='/captain-login' className='text-purple-500 '>Login as a captain</Link></p>
+        <p className='text-lg text-center mb-2'>Already have an account? <Link to='/captain-login' className='text-purple-500 '>Login here</Link></p>
       </div>
       <div>
         <Link to='/signup' className='bg-[#b70bae] flex items-center justify-center text-white rounded p-3 font-bold w-full '>Signup as a user</Link>

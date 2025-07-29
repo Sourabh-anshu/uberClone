@@ -19,7 +19,7 @@ const CaptainProtectWrapper = ({
       const fetchCaptainProfile = async() =>{
         await axios.get(`${import.meta.env.VITE_BASE_URL}/captains/profile`,{
         headers: {
-          Authorization: `bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       }).then(response =>{
         if(response.status === 200){

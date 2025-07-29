@@ -139,7 +139,7 @@ const captainSignup = () => {
               className='bg-[#eeeeee] w-[48%] rounded border px-3 py-2 text-lg'
             >
               <option value="">Vehicle Type</option>
-              <option value="moto">Moto</option>
+              <option value="motorcycle">Moto</option>
               <option value="car">Car</option>
               <option value="auto">Auto</option>
             </select>
